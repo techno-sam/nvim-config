@@ -19,8 +19,8 @@ autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
 ]])
 
 -- Treesitter folding 
-vim.wo.foldmethod = 'expr'
-vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
+--vim.wo.foldmethod = 'expr'
+--vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
 
 -- Vimspector options
 vim.cmd([[
@@ -40,6 +40,23 @@ let g:vimspector_terminal_maxwidth = 70
 --autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 --]])
 
+-- stolen from brother
+vim.wo.number = true -- show line nos
+vim.o.relativenumber = true -- better line nos
+
+-- Default indent setup
+vim.cmd([[
+" tabstop:          Width of tab character
+" softtabstop:      Fine tunes the amount of white space to be added
+" shiftwidth        Determines the amount of whitespace to add in normal mode
+" expandtab:        When this option is enabled, vi will use spaces instead of tabs
+set tabstop     =4
+set softtabstop =4
+set shiftwidth  =4
+set expandtab
+]])
+
+
 -- Indentation setup
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { "glsl", "javascript", "cpp", "java" },
@@ -58,7 +75,7 @@ set expandtab
 })
 
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = { "json" },
+  pattern = { "json", "lua" },
   callback = function(args)
     vim.cmd([[
 " tabstop:          Width of tab character

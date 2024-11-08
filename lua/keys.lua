@@ -28,6 +28,26 @@ map('n', "<leader>ft", ":FloatermNew --name=myfloat --height=0.8 --width=0.7 --a
 map('n', "t", ":FloatermToggle myfloat<CR>")
 map('t', "<Esc>", "<C-\\><C-n>:q<CR>")
 
+-- tree view
+map('n', 'f', ":NvimTreeToggle<CR>")
+
+-- window management
+map('n', '<leader>v', "<C-w>v") -- split vert
+map('n', '<leader>h', "<C-w>s") -- split horz
+map('n', '<leader>se', "<C-w>=") -- make split windows equal width & height
+map('n', '<leader>xs', ":close<CR>") -- close current split window
+
+-- better indenting
+map('v', '<', "<gv")
+map('v', '>', ">gv")
+
+-- navigate btw splits
+map('n', '<C-k>', ":wincmd k<CR>")
+map('n', '<C-j>', ":wincmd j<CR>")
+map('n', '<C-h>', ":wincmd h<CR>")
+map('n', '<C-l>', ":wincmd l<CR>")
+
+
 -- telescope
 local builtin = require('telescope.builtin')
 vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
