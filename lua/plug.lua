@@ -27,7 +27,7 @@ return require('packer').startup(function()
         tag = 'v2.*',
         run = "make install_jsregexp",
     }
-    use 'rafamadriz/friendly-snippets'
+    --use 'rafamadriz/friendly-snippets'
 
     -- nvim config dev
     use {
