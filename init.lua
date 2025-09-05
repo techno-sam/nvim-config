@@ -1,4 +1,6 @@
-local first_install = false
+local theme = "catppuccin" -- monokai or catppuccin
+
+local first_install = os.getenv("VI_FIRST_INSTALL") == "1"
 if first_install then
   require('plug')
   return
@@ -38,24 +40,76 @@ rt.setup({
   },
 })
 
+require("inlay-hints").setup({
+  commands = { enable = true }, -- Enable InlayHints commands, include `InlayHintsToggle`, `InlayHintsEnable` and `InlayHintsDisable`
+  autocmd = { enable = false } -- Enable the inlay hints on `LspAttach` event
+})
+
 require("clangd_extensions").setup {
-  inlay_hints = {
+--[[  inlay_hints = {
     inline = false
-  }
+  }--]]
 }
 
 local lspconfig = require"lspconfig"
 
+--lspconfig.wgsl_analyzer.setup{}
+--lspconfig.glasgow.setup{} -- wgsl analyzer, but functional
 lspconfig.glsl_analyzer.setup{}
 lspconfig.clangd.setup {
   on_attach = function(client, bufnr)
-    client.server_capabilities.signatureHelpProvider = false
-    local inlay_hints = require("clangd_extensions.inlay_hints")
-    inlay_hints.setup_autocmd()
-    inlay_hints.set_inlay_hints()
+    print("Attached clangd language server")
+    require("inlay-hints").on_attach(client, bufnr)
+    
+    -- Hover actions
+    vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+    -- Code action groups
+    vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
   end,
-  cmd = { 'clangd-14' }
+  settings = {
+    clangd = {
+      InlayHints = {
+        Designators = true,
+        Enabled = true,
+        ParameterNames = true,
+        DeducedTypes = true
+      },
+      fallbackFlags = { "-std=c++20" }
+    }
+  },
+  filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda', 'proto' },
+  cmd = { 'clangd-18' }
 }
+lspconfig.pylsp.setup {
+--on_attach = custom_attach,
+settings = {
+    pylsp = {
+    plugins = {
+        -- formatter options
+        black = { enabled = true },
+        autopep8 = { enabled = false },
+        yapf = { enabled = false },
+        -- linter options
+        pylint = { enabled = true, executable = "pylint" },
+        pyflakes = { enabled = false },
+        pycodestyle = { enabled = false },
+        -- type checker
+        pylsp_mypy = { enabled = true },
+        -- auto-completion options
+        jedi_completion = { fuzzy = true },
+        -- import sorting
+        pyls_isort = { enabled = true },
+    },
+    },
+},
+flags = {
+    debounce_text_changes = 200,
+},
+--capabilities = capabilities,
+}
+
+lspconfig.jdtls.setup {}
+
 
 -- LSP Diagnostics Options Setup 
 local sign = function(opts)
@@ -141,6 +195,22 @@ cmp.setup({
           return item
       end,
   },
+  sorting = {
+    priority_weight = 2,
+    comparators = {
+      cmp.config.compare.offset,
+      cmp.config.compare.exact,
+      -- cmp.config.compare.scopes,
+      cmp.config.compare.score,
+      cmp.config.compare.recently_used,
+      require("clangd_extensions.cmp_scores"),
+      cmp.config.compare.locality,
+      cmp.config.compare.kind,
+      cmp.config.compare.sort_text,
+      cmp.config.compare.length,
+      cmp.config.compare.order,
+    },
+  },
 })
 
 -- Treesitter Plugin Setup 
@@ -168,7 +238,10 @@ require("nvim-web-devicons").setup({
 	default = true;
 })
 
--- monokai theme setup
+
+if theme == "monokai" then
+-- INFO: monokai theme setup
+
 --local mk_palette = require('monokai').classic
 require('monokai').setup {
 --	palette = mk_palette,
@@ -181,6 +254,13 @@ require('monokai').setup {
 		["@preproc"]       = { fg = mk_palette.pink, style = 'bold' }
 	},--]]
 }
+elseif theme == "catppuccin" then
+-- INFO: catppuccin theme setup
+require("catppuccin").setup({
+    flavour = "mocha", -- auto, latte, frappe, macchiato, mocha
+})
+vim.cmd.colorscheme "catppuccin"
+end
 
 -- vim-illuminate setup
 -- default configuration
@@ -254,6 +334,12 @@ require("todo-comments").setup({
     optim = {"Info", "#C11BE6"}
   }
 })
+-- TODO: demo
+-- HACK: demo
+-- WARN: demo
+-- PERF: demo
+-- NOTE: demo
+-- TEST: demo
 
 -- nvim-tree setup
 require("nvim-tree").setup({
@@ -276,6 +362,23 @@ require("ibl").setup {
     }
 }
 
+-- conjure
+vim.g["conjure#filetypes"] = {
+  "clojure",
+  "fennel",
+  "janet",
+  "hy",
+  "julia",
+  "racket",
+  "scheme",
+  --"lua",
+  "lisp",
+  --"python",
+  --"rust",
+  "sql",
+}
+--vim.g["conjure#log#level"] = "debug"
+
 -- listchars
 vim.opt.list = true
 vim.opt.listchars:append "space:⋅"
@@ -284,6 +387,17 @@ vim.opt.listchars:append "space:⋅"
 	print("nope")
 	print("other")
 end)()--]]
+
+-- temporary fix for rust analyzer cancelling requests and NVIM not supporting it
+for _, method in ipairs({ "textDocument/diagnostic", "workspace/diagnostic" }) do
+    local default_diagnostic_handler = vim.lsp.handlers[method]
+    vim.lsp.handlers[method] = function(err, result, context, config)
+        if err ~= nil and err.code == -32802 then
+            return
+        end
+        return default_diagnostic_handler(err, result, context, config)
+    end
+end
 
 -- setup other lua files
 require('vars')

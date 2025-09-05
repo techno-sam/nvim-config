@@ -26,6 +26,13 @@ return require('packer').startup(function()
     
     -- More LSP for C++
     use 'p00f/clangd_extensions.nvim'
+    use 'MysticalDevil/inlay-hints.nvim'
+
+    -- automatic indent detection
+    use {
+      'nmac427/guess-indent.nvim',
+      config = function() require('guess-indent').setup {} end,
+    }
 
     use 'nvim-treesitter/nvim-treesitter'
 
@@ -43,6 +50,7 @@ return require('packer').startup(function()
     -- nice stuff
     use 'nvim-tree/nvim-web-devicons'
     use 'tanvirtin/monokai.nvim'
+    use { "catppuccin/nvim", as = "catppuccin" }
     use 'RRethy/vim-illuminate'
     use 'folke/trouble.nvim'
     use 'folke/todo-comments.nvim'
@@ -50,5 +58,27 @@ return require('packer').startup(function()
     use 'nvim-tree/nvim-tree.lua'
     use { 'lukas-reineke/indent-blankline.nvim', main = 'ibl', opts = {} }
     use 'm-demare/hlargs.nvim'
+
+    -- markdown
+    use {
+      'MeanderingProgrammer/render-markdown.nvim',
+      after = { 'nvim-treesitter' },
+      requires = { 'nvim-tree/nvim-web-devicons', opt = true },
+      config = function()
+        require('render-markdown').setup({})
+      end
+    }
+
+    -- scheme!
+    use 'Olical/conjure'
+
+    -- caddy
+    use 'isobit/vim-caddyfile'
+
+    -- headers
+    use { "attilarepka/header.nvim", config = function() require("header").setup() end }
+
+    -- more elegant colorcolumn
+    use { 'lukas-reineke/virt-column.nvim', config = function() require("virt-column").setup{} end }
 end)
 

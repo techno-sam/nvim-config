@@ -11,6 +11,8 @@ function map(mode, lhs, rhs, opts)
     vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
+vim.g.maplocalleader = ";"
+
 -- Vimspector
 vim.cmd([[
 nmap <F9> <cmd>call vimspector#Launch()<cr>
@@ -29,7 +31,7 @@ map('n', "t", ":FloatermToggle myfloat<CR>")
 map('t', "<Esc>", "<C-\\><C-n>:q<CR>")
 
 -- tree view
-map('n', 'f', ":NvimTreeToggle<CR>")
+map('n', ',', ":NvimTreeToggle<CR>")
 
 -- window management
 map('n', '<leader>v', "<C-w>v") -- split vert
@@ -57,3 +59,8 @@ vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 
 -- tagbar
 map('n', "<F8>", ":TagbarToggle<CR>")
+
+-- render markdown
+map('n', '<leader>rme', ":RenderMarkdown enable<CR>")
+map('n', '<leader>rmd', ":RenderMarkdown disable<CR>")
+map('n', '<leader>rmt', ":RenderMarkdown toggle<CR>")
