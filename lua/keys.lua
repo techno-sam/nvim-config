@@ -64,3 +64,15 @@ map('n', "<F8>", ":TagbarToggle<CR>")
 map('n', '<leader>rme', ":RenderMarkdown enable<CR>")
 map('n', '<leader>rmd', ":RenderMarkdown disable<CR>")
 map('n', '<leader>rmt', ":RenderMarkdown toggle<CR>")
+
+-- spelling
+vim.api.nvim_set_option_value("spelllang", "en,nl", {})
+vim.keymap.set('n', '<leader>lt', function()
+    vim.cmd("setlocal spell!")
+    if vim.api.nvim_get_option_value("spell", {scope="local"}) then
+        print("Spellcheck on")
+    else
+        print("Spellcheck off")
+    end
+end, {})
+map('i', "<C-l>", "<c-g>u<Esc>[s1z=`]a<c-g>u")
