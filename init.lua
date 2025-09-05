@@ -151,27 +151,17 @@ luasnip.setup({
   cut_selection_keys = "<Tab>",
   ext_opts = {
     [ls_types.choiceNode] = {
-      active = {
-        virt_text = {{"●", "Operator"}},
-        virt_text_pos = "inline",
-      },
-      unvisited = {
-        virt_text = {{"●", "Comment"}},
-        virt_text_pos = "inline",
-      },
+      active = { virt_text = {{"●", "Operator"}}, },
     },
     [ls_types.insertNode] = {
-      active = {
-        virt_text = {{"●", "Keyword"}},
-        virt_text_pos = "inline",
-      },
-      unvisited = {
-        virt_text = {{"●", "Comment"}},
-        virt_text_pos = "inline",
-      },
+      active = { virt_text = {{"●", "Keyword"}}, },
     },
   }
 })
+vim.cmd([[
+imap <silent><expr> <C-f> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-f>'
+smap <silent><expr> <C-f> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-f>'
+]])
 
 local cmp = require'cmp'
 cmp.setup({
@@ -187,9 +177,18 @@ cmp.setup({
     -- Add tab support
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
-        cmp.select_next_item()
+        if #cmp.get_entries() == 1 then
+          cmp.confirm({
+            behavior = cmp.ConfirmBehavior.Insert,
+            select = true,
+          })
+        else
+          cmp.select_next_item()
+        end
       elseif luasnip.locally_jumpable(1) then
         luasnip.jump(1)
+      elseif luasnip.expandable() then
+        luasnip.expand()
       else
         fallback()
       end
