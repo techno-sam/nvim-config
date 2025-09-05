@@ -19,10 +19,15 @@ return require('packer').startup(function()
     -- Useful completion sources:
     use 'hrsh7th/cmp-nvim-lua'
     use 'hrsh7th/cmp-nvim-lsp-signature-help'
-    use 'hrsh7th/cmp-vsnip'
+    use { 'saadparwaiz1/cmp_luasnip' }
     use 'hrsh7th/cmp-path'
     use 'hrsh7th/cmp-buffer'
-    use 'hrsh7th/vim-vsnip'
+    use {
+        'L3MON4D3/LuaSnip',
+        tag = 'v2.*',
+        build = "make install_jsregexp",
+        config = function() require("luasnip.loaders.from_vscode").lazy_load() end,
+    }
     use 'rafamadriz/friendly-snippets'
 
     -- More LSP for C++

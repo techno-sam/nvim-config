@@ -145,22 +145,40 @@ autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
 ]])
 
 -- Completion Plugin Setup
-local has_words_before = function()
-  unpack = unpack or table.unpack
-  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-end
-
-local feedkey = function(key, mode)
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
-end
+local luasnip = require'luasnip'
+local ls_types = require("luasnip.util.types")
+luasnip.setup({
+  cut_selection_keys = "<Tab>",
+  ext_opts = {
+    [ls_types.choiceNode] = {
+      active = {
+        virt_text = {{"●", "Operator"}},
+        virt_text_pos = "inline",
+      },
+      unvisited = {
+        virt_text = {{"●", "Comment"}},
+        virt_text_pos = "inline",
+      },
+    },
+    [ls_types.insertNode] = {
+      active = {
+        virt_text = {{"●", "Keyword"}},
+        virt_text_pos = "inline",
+      },
+      unvisited = {
+        virt_text = {{"●", "Comment"}},
+        virt_text_pos = "inline",
+      },
+    },
+  }
+})
 
 local cmp = require'cmp'
 cmp.setup({
   -- Enable LSP snippets
   snippet = {
     expand = function(args)
-        vim.fn["vsnip#anonymous"](args.body)
+      luasnip.lsp_expand(args.body)
     end,
   },
   mapping = {
@@ -170,13 +188,8 @@ cmp.setup({
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
-      elseif vim.fn["vsnip#available"](1) == 1 then
-        feedkey("<Plug>(vsnip-expand-or-jump)", "")
-      elseif has_words_before() then
-        cmp.complete()
-        if not cmp.visible() then
-          fallback()
-        end
+      elseif luasnip.locally_jumpable(1) then
+        luasnip.jump(1)
       else
         fallback()
       end
@@ -184,8 +197,8 @@ cmp.setup({
     ['<S-Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
-      elseif vim.fn["vsnip#jumpable"](-1) == 1 then
-        feedkey("<Plug>(vsnip-jump-prev)", "")
+      elseif luasnip.locally_jumpable(-1) then
+        luasnip.jump(-1)
       else
         fallback()
       end
@@ -206,7 +219,7 @@ cmp.setup({
     { name = 'nvim_lsp_signature_help'},            -- display function signatures with current parameter emphasized
     { name = 'nvim_lua', keyword_length = 2},       -- complete neovim's Lua runtime API such vim.lsp.*
     { name = 'buffer', keyword_length = 2 },        -- source current buffer
-    { name = 'vsnip', keyword_length = 2 },         -- nvim-cmp source for vim-vsnip 
+    { name = 'luasnip', keyword_length = 2 },         -- nvim-cmp source for cmp_luasnip
     { name = 'calc'},                               -- source for math calculation
   },
   window = {
@@ -218,7 +231,7 @@ cmp.setup({
       format = function(entry, item)
           local menu_icon ={
               nvim_lsp = 'λ',
-              vsnip = '⋗',
+              luasnip = '⋗',
               buffer = '',--'Ω',
               path = '',--'🖫',
           }
