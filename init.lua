@@ -145,6 +145,16 @@ autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
 ]])
 
 -- Completion Plugin Setup
+local has_words_before = function()
+  unpack = unpack or table.unpack
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+end
+
+local feedkey = function(key, mode)
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
+end
+
 local cmp = require'cmp'
 cmp.setup({
   -- Enable LSP snippets
@@ -157,8 +167,22 @@ cmp.setup({
     ['<C-p>'] = cmp.mapping.select_prev_item(),
     ['<C-n>'] = cmp.mapping.select_next_item(),
     -- Add tab support
-    ['<S-Tab>'] = cmp.mapping.select_prev_item(),
-    ['<Tab>'] = cmp.mapping.select_next_item(),
+    ['<Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif vim.fn["vsnip#available"](1) == 1 then
+        feedkey("<Plug>(vsnip-expand-or-jump)", "")
+      else
+        fallback()
+      end
+    end, {"i", "s"}),
+    ['<S-Tab>'] = cmp.mapping(function()
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif vim.fn["vsnip#jumpable"](-1) == 1 then
+        feedkey("<Plug>(vsnip-jump-prev)", "")
+      end
+    end, {"i", "s"}),
     ['<C-S-f>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete(),
@@ -211,6 +235,14 @@ cmp.setup({
       cmp.config.compare.order,
     },
   },
+  --[[enabled = function()
+    local disabled = false
+    disabled = disabled or (vim.api.nvim_get_option_value('buftype', { buf = 0 }) == 'prompt')
+    disabled = disabled or (vim.fn.reg_recording() ~= '')
+    disabled = disabled or (vim.fn.reg_executing() ~= '')
+    disabled = disabled or require('cmp.config.context').in_treesitter_capture('comment')
+    return not disabled
+  end,]]
 })
 
 -- Treesitter Plugin Setup 
