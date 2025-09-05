@@ -80,5 +80,8 @@ return require('packer').startup(function()
 
     -- more elegant colorcolumn
     use { 'lukas-reineke/virt-column.nvim', config = function() require("virt-column").setup{} end }
+
+    -- git
+    use { 'lewis6991/gitsigns.nvim', config = function() require("gitsigns").setup() end }
 end)
 
