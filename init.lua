@@ -162,6 +162,9 @@ vim.cmd([[
 imap <silent><expr> <C-f> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-f>'
 smap <silent><expr> <C-f> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-f>'
 ]])
+require("luasnip.loaders.from_vscode").lazy_load()
+require("luasnip.loaders.from_snipmate").lazy_load({paths = {"~/.config/nvim/snippets"}})
+require("luasnip.loaders.from_lua").lazy_load({paths = {"~/.config/nvim/snippets"}})
 
 local cmp = require'cmp'
 cmp.setup({
@@ -188,7 +191,9 @@ cmp.setup({
       elseif luasnip.locally_jumpable(1) then
         luasnip.jump(1)
       elseif luasnip.expandable() then
-        luasnip.expand()
+        if not luasnip.expand({}) then
+          fallback()
+        end
       else
         fallback()
       end

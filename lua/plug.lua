@@ -25,10 +25,17 @@ return require('packer').startup(function()
     use {
         'L3MON4D3/LuaSnip',
         tag = 'v2.*',
-        build = "make install_jsregexp",
-        config = function() require("luasnip.loaders.from_vscode").lazy_load() end,
+        run = "make install_jsregexp",
     }
     use 'rafamadriz/friendly-snippets'
+
+    -- nvim config dev
+    use {
+        'folke/lazydev.nvim',
+        config = function()
+            require("lazydev").setup()
+        end,
+    }
 
     -- More LSP for C++
     use 'p00f/clangd_extensions.nvim'
