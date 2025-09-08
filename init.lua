@@ -275,9 +275,10 @@ require('nvim-treesitter.configs').setup {
   auto_install = true,
   highlight = {
     enable = true,
+    disable = {"latex"},
     additional_vim_regex_highlighting=false,
   },
-  ident = { enable = true }, 
+  ident = { enable = true },
   rainbow = {
     enable = true,
     extended_mode = true,

@@ -96,5 +96,8 @@ return require('packer').startup(function()
 
     -- git
     use { 'lewis6991/gitsigns.nvim', config = function() require("gitsigns").setup() end }
+
+    -- latex
+    use { 'lervag/vimtex', tag = "v2.*", }
 end)
 
