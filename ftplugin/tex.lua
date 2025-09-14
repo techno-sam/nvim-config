@@ -138,3 +138,8 @@ vim.api.nvim_create_autocmd("User", {
     timer:start(200, 0, vim.schedule_wrap(sync_colorscheme))
   end
 })
+
+vim.cmd([[
+set textwidth   =90
+set colorcolumn =+0
+]])

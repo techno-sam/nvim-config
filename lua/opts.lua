@@ -71,7 +71,7 @@ set softtabstop =4
 set shiftwidth  =4
 set expandtab
     ]])
-  end 
+  end
 })
 
 vim.api.nvim_create_autocmd('FileType', {
@@ -87,7 +87,7 @@ set softtabstop =2
 set shiftwidth  =2
 set expandtab
     ]])
-  end 
+  end
 })
 
 vim.api.nvim_create_autocmd('FileType', {
@@ -103,7 +103,7 @@ set softtabstop =4
 set shiftwidth  =4
 set expandtab!
     ]])
-  end 
+  end
 })
 
 vim.api.nvim_create_autocmd('FileType', {

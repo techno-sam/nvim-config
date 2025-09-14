@@ -16,7 +16,16 @@ require("mason").setup({
         },
     }
 })
-require("mason-lspconfig").setup()
+require("mason-lspconfig").setup({
+  ensure_installed = {
+    "glsl_analyzer",
+    "jdtls",
+    "lua_ls",
+    "rust_analyzer",
+    "texlab",
+    "wgsl_analyzer"
+  }
+})
 
 local rt = require("rust-tools")
 
