@@ -66,13 +66,33 @@ map('n', '<leader>rmd', ":RenderMarkdown disable<CR>")
 map('n', '<leader>rmt', ":RenderMarkdown toggle<CR>")
 
 -- spelling
+local spell_langs = {
+    "en,nl",
+    "en",
+    "nl",
+    "nl,en"
+}
+
+local spell_lang = 0
+
+local function spell_status()
+    local on = vim.api.nvim_get_option_value("spell", {scope="local"})
+    local lang = vim.api.nvim_get_option_value("spelllang", {scope="local"})
+
+    local state = on and "on" or "off"
+
+    return "Spellcheck["..lang.."] "..state
+end
+
 vim.api.nvim_set_option_value("spelllang", "en,nl", {})
 vim.keymap.set('n', '<leader>lt', function()
     vim.cmd("setlocal spell!")
-    if vim.api.nvim_get_option_value("spell", {scope="local"}) then
-        print("Spellcheck on")
-    else
-        print("Spellcheck off")
-    end
+    print(spell_status())
+end, {})
+vim.keymap.set('n', '<leader>ll', function()
+    spell_lang = (spell_lang % #spell_langs) + 1
+    vim.api.nvim_set_option_value("spell", true, {scope="local"})
+    vim.api.nvim_set_option_value("spelllang", spell_langs[spell_lang], {scope="local"})
+    print(spell_status())
 end, {})
 map('i', "<C-l>", "<c-g>u<Esc>[s1z=`]a<c-g>u")
