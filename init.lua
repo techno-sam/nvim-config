@@ -478,11 +478,19 @@ end)()--]]
 
 -- lualine
 require("lualine").setup {
+  options = {
+    disabled_filetypes = {
+      'statusline',
+      'winbar',
+      'NvimTree',
+    },
+    globalstatus = true, -- single bar across bottom of window
+  },
   sections = {
     lualine_a = {'mode'},
     lualine_b = {'branch', 'diff', 'diagnostics'},
     lualine_c = {'filename'},
-    lualine_x = {'encoding', 'fileformat', 'filetype'},
+    lualine_x = {'lsp_status', 'fileformat', 'filetype'},
     lualine_y = {'progress'},
     lualine_z = {'location'}
   },
