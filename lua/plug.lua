@@ -8,7 +8,7 @@ return require('packer').startup(function()
     use 'williamboman/mason-lspconfig.nvim'
 
     use 'neovim/nvim-lspconfig'
-    use 'simrat39/rust-tools.nvim'
+    use 'mrcjkb/rustaceanvim'
 
     -- Completion framework:
     use 'hrsh7th/nvim-cmp'
@@ -39,7 +39,9 @@ return require('packer').startup(function()
 
     -- More LSP for C++
     use 'p00f/clangd_extensions.nvim'
-    use 'MysticalDevil/inlay-hints.nvim'
+
+    -- inlay hints
+    use 'felpafel/inlay-hint.nvim'
 
     -- automatic indent detection
     use {

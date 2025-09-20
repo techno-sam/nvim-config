@@ -21,23 +21,20 @@ require("mason-lspconfig").setup({
     "glsl_analyzer",
     "jdtls",
     "lua_ls",
-    "rust_analyzer",
     "texlab",
     "wgsl_analyzer",
     "slangd"
   }
 })
 
-local rt = require("rust-tools")
-
-rt.setup({
+vim.g.rustaceanvim = {
   server = {
     on_attach = function(_, bufnr)
       print("Attached rust language server")
       -- Hover actions
-      vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+      vim.keymap.set("n", "<C-space>", function() vim.cmd.RustLsp({'hover', 'actions'}) end, { silent = true, buffer = bufnr })
       -- Code action groups
-      vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+      vim.keymap.set("n", "<Leader>a", function() vim.cmd.RustLsp('codeAction') end, { silent = true, buffer = bufnr })
     end,
     --[[settings = { -- disable for non-base-os projects
       ["rust-analyzer"] = {
@@ -48,11 +45,25 @@ rt.setup({
       }
     },--]]
   },
-})
+}
 
-require("inlay-hints").setup({
-  commands = { enable = true }, -- Enable InlayHints commands, include `InlayHintsToggle`, `InlayHintsEnable` and `InlayHintsDisable`
-  autocmd = { enable = false } -- Enable the inlay hints on `LspAttach` event
+require("inlay-hint").setup({
+  highlight_group = "Comment"
+})
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(args)
+    local bufnr = args.buf ---@type number
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client ~= nil and client:supports_method('textDocument/inlayHint', bufnr) then
+      vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+      vim.keymap.set('n', '<leader>i', function()
+        vim.lsp.inlay_hint.enable(
+          not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }),
+          { bufnr = bufnr }
+        )
+      end, { buffer = bufnr })
+    end
+  end,
 })
 
 require("clangd_extensions").setup {
@@ -61,12 +72,14 @@ require("clangd_extensions").setup {
   }--]]
 }
 
-local lspconfig = require"lspconfig"
+vim.lsp.config("*", {
+  capabilities = require("cmp_nvim_lsp").default_capabilities()
+})
 
 --lspconfig.wgsl_analyzer.setup{}
 --lspconfig.glasgow.setup{} -- wgsl analyzer, but functional
-lspconfig.glsl_analyzer.setup{}
-lspconfig.clangd.setup {
+vim.lsp.config("glsl_analyzer", {})
+vim.lsp.config("clangd", {
   on_attach = function(client, bufnr)
     print("Attached clangd language server")
     require("inlay-hints").on_attach(client, bufnr)
@@ -89,12 +102,12 @@ lspconfig.clangd.setup {
   },
   filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda', 'proto' },
   cmd = { 'clangd-18' }
-}
-lspconfig.pylsp.setup {
---on_attach = custom_attach,
-settings = {
+})
+vim.lsp.config("pylsp", {
+  --on_attach = custom_attach,
+  settings = {
     pylsp = {
-    plugins = {
+      plugins = {
         -- formatter options
         black = { enabled = true },
         autopep8 = { enabled = false },
@@ -109,16 +122,24 @@ settings = {
         jedi_completion = { fuzzy = true },
         -- import sorting
         pyls_isort = { enabled = true },
+      },
     },
-    },
-},
-flags = {
+  },
+  flags = {
     debounce_text_changes = 200,
-},
---capabilities = capabilities,
-}
+  },
+  --capabilities = capabilities,
+})
 
-lspconfig.jdtls.setup {}
+vim.lsp.config("jdtls", {})
+
+vim.lsp.enable({
+  --"rust_analyzer", -- handled by rustaceanvim
+  "glsl_analyzer",
+  "clangd",
+  "pylsp",
+  "jdtls"
+})
 
 
 -- LSP Diagnostics Options Setup 
