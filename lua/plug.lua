@@ -101,5 +101,8 @@ return require('packer').startup(function()
 
     -- latex
     use { 'lervag/vimtex', tag = "v2.*", }
+
+    -- lualine
+    use 'nvim-lualine/lualine.nvim'
 end)
 
