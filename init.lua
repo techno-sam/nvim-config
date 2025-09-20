@@ -23,7 +23,8 @@ require("mason-lspconfig").setup({
     "lua_ls",
     "rust_analyzer",
     "texlab",
-    "wgsl_analyzer"
+    "wgsl_analyzer",
+    "slangd"
   }
 })
 
