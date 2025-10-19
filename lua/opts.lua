@@ -46,6 +46,11 @@ let g:vimspector_terminal_maxwidth = 70
 vim.wo.number = true -- show line nos
 vim.o.relativenumber = true -- better line nos
 
+-- highlight trailing whitespace
+vim.cmd([[
+match errorMsg /\s\+$/
+]])
+
 -- Default indent setup
 vim.cmd([[
 " tabstop:          Width of tab character

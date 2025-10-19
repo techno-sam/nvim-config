@@ -104,5 +104,7 @@ return require('packer').startup(function()
 
     -- lualine
     use 'nvim-lualine/lualine.nvim'
+
+    use 'folke/snacks.nvim'
 end)
 

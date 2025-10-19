@@ -96,3 +96,9 @@ vim.keymap.set('n', '<leader>ll', function()
     print(spell_status())
 end, {})
 map('i', "<C-l>", "<c-g>u<Esc>[s1z=`]a<c-g>u")
+
+-- snacks
+local snacks = require("snacks") -- setup in lua/plug.lua
+vim.keymap.set('n', '<leader>un', function()
+    snacks.notifier.hide()
+end, {desc="Dismiss All Notifications"})
