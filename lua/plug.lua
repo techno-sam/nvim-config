@@ -41,7 +41,7 @@ return require('packer').startup(function()
     use 'p00f/clangd_extensions.nvim'
 
     -- inlay hints
-    use 'felpafel/inlay-hint.nvim'
+    use 'techno-sam/inlay-hint.nvim'
 
     -- automatic indent detection
     use {
