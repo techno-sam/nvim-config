@@ -71,7 +71,7 @@ return require('packer').startup(function()
     use 'folke/todo-comments.nvim'
     use 'preservim/tagbar'
     use 'nvim-tree/nvim-tree.lua'
-    use { 'lukas-reineke/indent-blankline.nvim', main = 'ibl', opts = {} }
+    use { 'techno-sam/indent-blankline.nvim', main = 'ibl', branch='fix/inlay-hint-compat', opts = {} }
     use 'm-demare/hlargs.nvim'
 
     -- markdown

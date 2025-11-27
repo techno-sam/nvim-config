@@ -20,6 +20,14 @@ set signcolumn=yes
 autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
 ]])
 
+-- Quadlet Filetypes
+vim.filetype.add({
+  extension = {
+    container = "systemd",
+    network = "systemd"
+  }
+})
+
 -- Treesitter folding 
 --vim.wo.foldmethod = 'expr'
 --vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
@@ -114,7 +122,7 @@ set expandtab!
 })
 
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = { "c" },
+  pattern = { "c", "h" },
   callback = function(args)
     vim.cmd([[
 " tabstop:          Width of tab character
