@@ -18,12 +18,12 @@ require("mason").setup({
 })
 require("mason-lspconfig").setup({
   ensure_installed = {
-    "glsl_analyzer",
-    "jdtls",
+--    "glsl_analyzer",
+--    "jdtls",
     "lua_ls",
-    "texlab",
-    "wgsl_analyzer",
-    "slangd"
+--    "texlab",
+--    "wgsl_analyzer",
+--    "slangd"
   }
 })
 
@@ -66,11 +66,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
-require("clangd_extensions").setup {
+--require("clangd_extensions").setup {
 --[[  inlay_hints = {
     inline = false
   }--]]
-}
+--}
 
 vim.lsp.config("*", {
   capabilities = require("cmp_nvim_lsp").default_capabilities()
@@ -114,11 +114,11 @@ vim.lsp.config("pylsp", {
         autopep8 = { enabled = false },
         yapf = { enabled = false },
         -- linter options
-        pylint = { enabled = true, executable = "pylint" },
+        pylint = { enabled = false, executable = "pylint" },
         pyflakes = { enabled = false },
         pycodestyle = { enabled = false },
         -- type checker
-        pylsp_mypy = { enabled = true },
+        pylsp_mypy = { enabled = false },
         -- auto-completion options
         jedi_completion = { fuzzy = true },
         -- import sorting
@@ -140,11 +140,11 @@ vim.lsp.config("hls", {
 
 vim.lsp.enable({
   --"rust_analyzer", -- handled by rustaceanvim
-  "glsl_analyzer",
-  "clangd",
+  --"glsl_analyzer",
+  --"clangd",
   "pylsp",
-  "jdtls",
-  "hls",
+  --"jdtls",
+  --"hls",
 })
 
 
@@ -288,7 +288,7 @@ cmp.setup({
       -- cmp.config.compare.scopes,
       cmp.config.compare.score,
       cmp.config.compare.recently_used,
-      require("clangd_extensions.cmp_scores"),
+      --require("clangd_extensions.cmp_scores"),
       cmp.config.compare.locality,
       cmp.config.compare.kind,
       cmp.config.compare.sort_text,

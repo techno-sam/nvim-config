@@ -8,7 +8,7 @@ return require('packer').startup(function()
     use 'williamboman/mason-lspconfig.nvim'
 
     use 'neovim/nvim-lspconfig'
-    use 'mrcjkb/rustaceanvim'
+--    use 'mrcjkb/rustaceanvim'
 
     -- Completion framework:
     use 'hrsh7th/nvim-cmp'
@@ -38,7 +38,7 @@ return require('packer').startup(function()
     }
 
     -- More LSP for C++
-    use 'p00f/clangd_extensions.nvim'
+--    use 'p00f/clangd_extensions.nvim'
 
     -- inlay hints
     use 'techno-sam/inlay-hint.nvim'
@@ -85,10 +85,10 @@ return require('packer').startup(function()
     }
 
     -- scheme!
-    use 'Olical/conjure'
+--    use 'Olical/conjure'
 
     -- caddy
-    use 'isobit/vim-caddyfile'
+--    use 'isobit/vim-caddyfile'
 
     -- headers
     use { "attilarepka/header.nvim", config = function() require("header").setup() end }
@@ -100,7 +100,7 @@ return require('packer').startup(function()
     use { 'lewis6991/gitsigns.nvim', config = function() require("gitsigns").setup() end }
 
     -- latex
-    use { 'lervag/vimtex', tag = "v2.*", }
+--    use { 'lervag/vimtex', tag = "v2.*", }
 
     -- lualine
     use 'nvim-lualine/lualine.nvim'
