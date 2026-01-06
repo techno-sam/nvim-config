@@ -134,12 +134,17 @@ vim.lsp.config("pylsp", {
 
 vim.lsp.config("jdtls", {})
 
+vim.lsp.config("hls", {
+  filetypes = {'haskell', 'lhaskell', 'cabal'}
+})
+
 vim.lsp.enable({
   --"rust_analyzer", -- handled by rustaceanvim
   "glsl_analyzer",
   "clangd",
   "pylsp",
-  "jdtls"
+  "jdtls",
+  "hls",
 })
 
 

@@ -90,7 +90,7 @@ set expandtab
 })
 
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = { "json", "lua" },
+  pattern = { "json", "lua", "haskell", "lhaskell" },
   callback = function(args)
     vim.cmd([[
 " tabstop:          Width of tab character
