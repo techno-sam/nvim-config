@@ -23,7 +23,13 @@ require("mason-lspconfig").setup({
     "lua_ls",
     "texlab",
     "wgsl_analyzer",
-    "slangd"
+    "slangd",
+
+    "html",
+    "cssls",
+    "cssmodules_ls",
+    "css_variables",
+    "intelephense"
   }
 })
 
@@ -145,6 +151,12 @@ vim.lsp.enable({
   "pylsp",
   "jdtls",
   "hls",
+
+  "html",
+  "cssls",
+  "cssmodules_ls",
+  "css_variables",
+  "intelephense"
 })
 
 
@@ -313,7 +325,7 @@ require('nvim-treesitter.configs').setup {
   highlight = {
     enable = true,
     disable = {"latex"},
-    additional_vim_regex_highlighting=false,
+    additional_vim_regex_highlighting =  {"php"},
   },
   ident = { enable = true },
   rainbow = {

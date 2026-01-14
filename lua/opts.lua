@@ -74,7 +74,7 @@ set expandtab
 
 -- Indentation setup
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = { "glsl", "javascript", "cpp", "java" },
+  pattern = { "glsl", "javascript", "cpp", "java", "php" },
   callback = function(args)
     vim.cmd([[
 " tabstop:          Width of tab character

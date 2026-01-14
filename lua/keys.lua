@@ -102,3 +102,8 @@ local snacks = require("snacks") -- setup in lua/plug.lua
 vim.keymap.set('n', '<leader>un', function()
     snacks.notifier.hide()
 end, {desc="Dismiss All Notifications"})
+
+-- format code
+vim.keymap.set({'n','v'}, '<leader>pf', function()
+    vim.lsp.buf.format()
+end, {desc="Format buffer"})
