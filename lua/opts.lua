@@ -59,6 +59,10 @@ vim.cmd([[
 match errorMsg /\s\+$/
 ]])
 
+vim.cmd([[
+set colorcolumn =+0
+]])
+
 -- Default indent setup
 vim.cmd([[
 " tabstop:          Width of tab character
@@ -90,7 +94,7 @@ set expandtab
 })
 
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = { "json", "lua", "haskell", "lhaskell" },
+  pattern = { "json", "lua", "haskell", "lhaskell", "nix" },
   callback = function(args)
     vim.cmd([[
 " tabstop:          Width of tab character
@@ -122,7 +126,7 @@ set expandtab!
 })
 
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = { "c", "h" },
+  pattern = { "c", "h", "python" },
   callback = function(args)
     vim.cmd([[
 " tabstop:          Width of tab character
@@ -134,7 +138,6 @@ set softtabstop =4
 set shiftwidth  =4
 set expandtab
 set textwidth   =100
-set colorcolumn =+0
     ]])
     require("virt-column").setup{}
   end

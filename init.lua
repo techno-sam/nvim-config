@@ -144,6 +144,15 @@ vim.lsp.config("hls", {
   filetypes = {'haskell', 'lhaskell', 'cabal'}
 })
 
+vim.lsp.config("erlangls", {
+  root_markers = {
+    'erlang_ls.config',
+    'rebar.config',
+    'erlang.mk',
+    '.git',
+  }
+})
+
 vim.lsp.enable({
   --"rust_analyzer", -- handled by rustaceanvim
   "glsl_analyzer",
@@ -151,6 +160,7 @@ vim.lsp.enable({
   "pylsp",
   "jdtls",
   "hls",
+  "erlangls",
 
   "html",
   "cssls",
