@@ -153,6 +153,12 @@ vim.lsp.config("erlangls", {
   }
 })
 
+vim.lsp.config("qml-language-server", {
+  cmd = { "qml-language-server" },
+  filetypes = { "qml" },
+  root_markers = { { "qmldir", "shell.qml"}, ".git" },
+})
+
 vim.lsp.enable({
   --"rust_analyzer", -- handled by rustaceanvim
   "glsl_analyzer",
@@ -166,7 +172,9 @@ vim.lsp.enable({
   "cssls",
   "cssmodules_ls",
   "css_variables",
-  "intelephense"
+  "intelephense",
+
+  "qml-language-server"
 })
 
 
@@ -441,7 +449,7 @@ require("todo-comments").setup({
     },
     TODO = { icon = " ", color = "info" },
     HACK = { icon = " ", color = "warning" },
-    WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX" } },
+    WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX", "SAFETY" } },
     PERF = { icon = "󰅒 ", color = "optim", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
     NOTE = { icon = " ", color = "hint", alt = { "INFO" } },
     TEST = { icon = "󰙨 ", color = "test", alt = { "TESTING", "PASSED", "FAILED" } },
@@ -535,7 +543,10 @@ require("lualine").setup {
 
 --lsp progress notification, from https://github.com/folke/snacks.nvim/blob/main/docs/notifier.md
 require("snacks").setup {
-    notifier = { enabled = true }
+    notifier = { enabled = true },
+    image = {
+      enabled = true
+    }
 }
 ---@type table<number, {token:lsp.ProgressToken, msg:string, done:boolean}[]>
 local progress = vim.defaulttable()
