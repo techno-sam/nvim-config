@@ -10,6 +10,9 @@ return require('packer').startup(function()
     use 'neovim/nvim-lspconfig'
     use 'mrcjkb/rustaceanvim'
 
+    -- for the memory layout view
+    use 'vxpm/ferris.nvim'
+
     -- Completion framework:
     use 'hrsh7th/nvim-cmp'
 

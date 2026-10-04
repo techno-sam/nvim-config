@@ -41,6 +41,10 @@ vim.g.rustaceanvim = {
       vim.keymap.set("n", "<C-space>", function() vim.cmd.RustLsp({'hover', 'actions'}) end, { silent = true, buffer = bufnr })
       -- Code action groups
       vim.keymap.set("n", "<Leader>a", function() vim.cmd.RustLsp('codeAction') end, { silent = true, buffer = bufnr })
+
+
+      local view_mem_layout = require("ferris.methods.view_memory_layout")
+      vim.keymap.set("n", "M", function() view_mem_layout() end, { silent = true, buffer = bufnr })
     end,
     --[[settings = { -- disable for non-base-os projects
       ["rust-analyzer"] = {
@@ -174,7 +178,9 @@ vim.lsp.enable({
   "css_variables",
   "intelephense",
 
-  "qml-language-server"
+  "qml-language-server",
+
+  "postgres_lsp"
 })
 
 
@@ -382,6 +388,21 @@ elseif theme == "catppuccin" then
 -- INFO: catppuccin theme setup
 require("catppuccin").setup({
     flavour = "mocha", -- auto, latte, frappe, macchiato, mocha
+
+    -- FIXME: switch to a supported package manager (i.e. not packer)
+    auto_integrations = false,
+    integrations = {
+      cmp = true,
+      gitsigns = true,
+      hop = true,
+      illuminate = true,
+      indent_blankline = true,
+      mason = true,
+      nvimtree = true,
+      render_markdown = true,
+      snacks = true,
+      telescope = true,
+    }
 })
 vim.cmd.colorscheme "catppuccin"
 end
