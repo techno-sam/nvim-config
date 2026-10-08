@@ -7,18 +7,13 @@
 -- updatetime: set updatetime for CursorHold
 vim.opt.completeopt = {'menuone', 'noselect', 'noinsert'}
 vim.opt.shortmess = vim.opt.shortmess + { c = true}
-vim.api.nvim_set_option('updatetime', 300)
+vim.api.nvim_set_option_value('updatetime', 300)
+
+-- listchars
+vim.opt.list = true
+vim.opt.listchars:append "space:⋅"
 
 vim.o.winborder = 'rounded'
-
--- Fixed column for diagnostics to appear
--- Show autodiagnostic popup on cursor hover_range
--- Goto previous / next diagnostic warning / error 
--- Show inlay_hints more frequently 
-vim.cmd([[
-set signcolumn=yes
-autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
-]])
 
 -- Quadlet Filetypes
 vim.filetype.add({
@@ -28,16 +23,6 @@ vim.filetype.add({
   }
 })
 
--- Treesitter folding 
---vim.wo.foldmethod = 'expr'
---vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
-
--- Vimspector options
-vim.cmd([[
-let g:vimspector_sidebar_width = 85
-let g:vimspector_bottombar_height = 15
-let g:vimspector_terminal_maxwidth = 70
-]])
 
 -- C++ setup (https://stackoverflow.com/a/3458218)
 --vim.cmd([[
@@ -139,6 +124,6 @@ set shiftwidth  =4
 set expandtab
 set textwidth   =100
     ]])
-    require("virt-column").setup{}
+    --require("virt-column").setup{}
   end
 })
