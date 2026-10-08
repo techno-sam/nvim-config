@@ -18,7 +18,6 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = "\\"
 vim.g.maplocalleader = ";"
 
--- TODO: refactor to only set vim.opt and such things
 require("config.opts")
 
 require("lazy").setup({

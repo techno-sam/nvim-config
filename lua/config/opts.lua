@@ -1,3 +1,6 @@
+-- vim.{o,wo,bo} are preferred for simple options
+-- for complex options (e.g. those involving lists) use vim.opt
+
 --Set completeopt to have a better completion experience
 -- :help completeopt
 -- menuone: popup even when there's only one match
@@ -7,11 +10,18 @@
 -- updatetime: set updatetime for CursorHold
 vim.opt.completeopt = {'menuone', 'noselect', 'noinsert'}
 vim.opt.shortmess = vim.opt.shortmess + { c = true}
-vim.api.nvim_set_option_value('updatetime', 300)
+vim.o.updatetime = 300
+
+-- we have lualine, no need to separately show mode
+vim.o.showmode = false
 
 -- listchars
-vim.opt.list = true
+vim.o.list = true
 vim.opt.listchars:append "space:⋅"
+
+-- line numbers
+vim.wo.number = true -- absolute number on current line
+vim.wo.relativenumber = true -- relative numbers on other lines
 
 vim.o.winborder = 'rounded'
 
@@ -23,6 +33,75 @@ vim.filetype.add({
   }
 })
 
+-- highlight trailing whitespace
+vim.api.nvim_create_autocmd("WinEnter", {
+  callback = function()
+    -- avoid duplicates
+    if vim.w.trailing_whitespace_match then return end
+
+    vim.w.trailing_whitespace_match = vim.fn.matchadd(
+      "ErrorMsg",
+        [[\s\+$]]
+    )
+  end
+})
+
+-- colorcolumn at textwidth
+vim.opt.colorcolumn:append("+0")
+
+--[[
+Indentation setup:
+  tabstop:          Width of tab character (i.e. ASCII-9)
+  softtabstop:      Number of columns <Tab> and <BS> add/remove in insert mode.
+  shiftwidth        Number of columns in one level of (auto)indentation. Normal mode: <<, >>
+  expandtab:        If enabled, use spaces instead of tabs
+--]]
+
+-- default: 4-space indents
+vim.o.tabstop     = 4
+vim.o.softtabstop = 4
+vim.o.shiftwidth  = 4
+vim.o.expandtab   = true
+
+-- customize indents for particular file types
+-- projects should use a .editorconfig to overwrite these
+
+local indents = {
+  {
+    ft = { "glsl", "javascript", "cpp", "java", "php" },
+    spaces = 4,
+  },
+
+  {
+    ft = { "json", "lua", "haskell", "lhaskell", "nix", "qml" },
+    spaces = 2,
+  },
+
+  {
+    ft = { "c", "h", "python" },
+    spaces = 4,
+    extra = { textwidth = 100 },
+  },
+}
+
+for _, cfg in ipairs(indents) do
+  vim.api.nvim_create_autocmd("FileType", {
+    pattern = cfg.ft,
+    callback = function(_)
+      local width = cfg.spaces or cfg.tab_width
+      vim.bo.tabstop = width
+      vim.bo.softtabstop = width
+      vim.bo.shiftwidth = width
+      vim.bo.expandtab = cfg.spaces ~= nil
+
+      if cfg.extra ~= nil then
+        for k, v in pairs(cfg.extra) do
+          vim.bo[k] = v
+        end
+      end
+    end
+  })
+end
 
 -- C++ setup (https://stackoverflow.com/a/3458218)
 --vim.cmd([[
@@ -34,96 +113,3 @@ vim.filetype.add({
 --
 --autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 --]])
-
--- stolen from brother
-vim.wo.number = true -- show line nos
-vim.o.relativenumber = true -- better line nos
-
--- highlight trailing whitespace
-vim.cmd([[
-match errorMsg /\s\+$/
-]])
-
-vim.cmd([[
-set colorcolumn =+0
-]])
-
--- Default indent setup
-vim.cmd([[
-" tabstop:          Width of tab character
-" softtabstop:      Fine tunes the amount of white space to be added
-" shiftwidth        Determines the amount of whitespace to add in normal mode
-" expandtab:        When this option is enabled, vi will use spaces instead of tabs
-set tabstop     =4
-set softtabstop =4
-set shiftwidth  =4
-set expandtab
-]])
-
-
--- Indentation setup
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { "glsl", "javascript", "cpp", "java", "php" },
-  callback = function(args)
-    vim.cmd([[
-" tabstop:          Width of tab character
-" softtabstop:      Fine tunes the amount of white space to be added
-" shiftwidth        Determines the amount of whitespace to add in normal mode
-" expandtab:        When this option is enabled, vi will use spaces instead of tabs
-set tabstop     =4
-set softtabstop =4
-set shiftwidth  =4
-set expandtab
-    ]])
-  end
-})
-
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { "json", "lua", "haskell", "lhaskell", "nix", "qml" },
-  callback = function(args)
-    vim.cmd([[
-" tabstop:          Width of tab character
-" softtabstop:      Fine tunes the amount of white space to be added
-" shiftwidth        Determines the amount of whitespace to add in normal mode
-" expandtab:        When this option is enabled, vi will use spaces instead of tabs
-set tabstop     =2
-set softtabstop =2
-set shiftwidth  =2
-set expandtab
-    ]])
-  end
-})
-
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { "groovy" },
-  callback = function(args)
-    vim.cmd([[
-" tabstop:          Width of tab character
-" softtabstop:      Fine tunes the amount of white space to be added
-" shiftwidth        Determines the amount of whitespace to add in normal mode
-" expandtab:        When this option is enabled, vi will use spaces instead of tabs
-set tabstop     =4
-set softtabstop =4
-set shiftwidth  =4
-set expandtab!
-    ]])
-  end
-})
-
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { "c", "h", "python" },
-  callback = function(args)
-    vim.cmd([[
-" tabstop:          Width of tab character
-" softtabstop:      Fine tunes the amount of white space to be added
-" shiftwidth        Determines the amount of whitespace to add in normal mode
-" expandtab:        When this option is enabled, vi will use spaces instead of tabs
-set tabstop     =4
-set softtabstop =4
-set shiftwidth  =4
-set expandtab
-set textwidth   =100
-    ]])
-    --require("virt-column").setup{}
-  end
-})
