@@ -8,6 +8,13 @@ return {
       notifier = { enabled = true },
       image = { enabled = true },
     },
+    keys = {
+      {
+        "<leader>un",
+        function() require("snacks").notifier.hide() end,
+        desc = "Dismiss All Notifications"
+      },
+    },
     init = function()
       -- lsp progress notification
       -- https://github.com/folke/snacks.nvim/blob/main/docs/notifier.md
