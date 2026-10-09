@@ -21,5 +21,5 @@ vim.lsp.config("clangd", {
     }
   },
   filetypes = { 'c', 'cpp', 'objc', 'objcpp', 'cuda', 'proto' },
-  cmd = { 'clangd-18' }
+  -- cmd = { 'clangd-18' }
 })

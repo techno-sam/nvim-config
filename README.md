@@ -4,11 +4,7 @@
 
 This is here for the curious, no support will be given.
 
-My neovim setup is pretty rust-optimized, so you should have rustup set up *with* rust-analyzer.
-
-These instructions are for linux, but should be fairly easy to adapt to other OSes.
-
-
+I run this on Ubuntu, but other linuxes and perhaps even other OSes should work too.
 
 ## Installing
 
@@ -16,16 +12,15 @@ These instructions are for linux, but should be fairly easy to adapt to other OS
 
 1. [install neovim](https://github.com/neovim/neovim/blob/master/INSTALL.md). You'll be wanting the bleeding-edge nightly release.
 
-2. Install [Universal CTags](https://github.com/universal-ctags/ctags)
+2. Install **clangd**: either with your system package manager, or from within neovim using `:Mason`
 
-3. Install [packer.nvim](https://github.com/wbthomason/packer.nvim)
+3. Install **rust-analyzer**: do this through rustup so it matches your toolchain
 
-4. Clone this thing TODO
+4. Optionally install [lazygit](https://github.com/jesseduffield/lazygit)
 
-5. switch to first install
+5. If you have an existing nvim config, move it out of the way: `mv ~/.config/nvim ~/.config/nvim.$(date '+%Y%m%d-%H%M%S').bak`  
+   You may also want to move your `~/.local/share/nvim` and possibly `~/.local/state/nvim`, but this might not be necessary.
 
-6. packer sync
+6. Clone this thing: `git clone https://github.com/techno-sam/nvim-config.git ~/.config/nvim`
 
-7. switch away from first install
-
-8. Have fun
+7. Run nvim. Lazy should install itself and all plugins. Run `:Mason` and wait for everything to install. Quit and reopen nvim to ensure everything loads properly.

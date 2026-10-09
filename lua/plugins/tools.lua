@@ -86,6 +86,7 @@ return {
           { "<leader>d", group = "debug" },
           { "<leader>rm", group = "render md" },
           { "<leader>l", group = "spelling" },
+          { "<leader>g", group = "git" },
         },
       },
     },
