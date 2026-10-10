@@ -16,6 +16,8 @@ I run this on Ubuntu, but other linuxes and perhaps even other OSes should work 
 
 3. Install **rust-analyzer**: do this through rustup so it matches your toolchain
 
+4. Install [tree-sitter-cli 0.26.1 or later](https://github.com/tree-sitter/tree-sitter/blob/master/crates/cli/README.md): with your system package manager, you need this before install starts
+
 4. Optionally install [lazygit](https://github.com/jesseduffield/lazygit)
 
 5. If you have an existing nvim config, move it out of the way: `mv ~/.config/nvim ~/.config/nvim.$(date '+%Y%m%d-%H%M%S').bak`  
