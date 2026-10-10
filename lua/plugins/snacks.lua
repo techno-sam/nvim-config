@@ -1,3 +1,9 @@
+local ascii_cat = {
+  "    |\\__/,|   (`\\ ",
+  "  _.|o o  |_   ) )",
+  "-(((---(((--------",
+}
+
 return {
   {
     "folke/snacks.nvim",
@@ -7,6 +13,50 @@ return {
     opts = {
       notifier = { enabled = true },
       image = { enabled = true },
+      dashboard = {
+        enabled = true,
+        sections = {
+          { section = "header" },
+          { section = "keys", gap = 1, padding = 1 },
+          function(dashboard)
+            local size = dashboard:size()
+            local width = dashboard.opts.width
+            local gap = dashboard.opts.pane_gap
+
+            -- Only show when two columns fit
+            if size.width >= 2 * width + gap then
+              return {
+                pane = 2,
+                text = {
+                  "\n\n" .. table.concat(ascii_cat, "\n"),
+                  hl = "SnacksDashboardHeader",
+                  align = "left",
+                },
+                height = 5,
+                padding = 1,
+              }
+            end
+          end,
+          { pane = 2, icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
+          { pane = 2, icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
+          {
+            pane = 2,
+            icon = " ",
+            title = "Git Status",
+            section = "terminal",
+            enabled = function()
+              return Snacks.git.get_root() ~= nil
+            end,
+            cmd = "git status --short --branch --renames",
+            height = 5,
+            padding = 1,
+            ttl = 5 * 60,
+            indent = 3,
+          },
+          -- weather { pane = 2, section = "terminal", cmd = "curl -s 'wttr.in/?0'"},
+          { section = "startup" },
+        },
+      },
     },
     keys = {
       {
