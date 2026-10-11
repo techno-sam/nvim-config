@@ -1,12 +1,9 @@
 return {
   {
-    -- TODO: I have to update this
     "techno-sam/inlay-hint.nvim",
-    enabled = false,
+    event = "LspAttach",
     opts = { highlight_group = "Comment" },
-    config = function(_, opts)
-      require("inlay-hint").setup(opts)
-
+    init = function()
       vim.api.nvim_create_autocmd('LspAttach', {
         callback = function(args)
           local bufnr = args.buf ---@type number
@@ -18,7 +15,7 @@ return {
                 not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }),
                 { bufnr = bufnr }
               )
-            end, { buffer = bufnr })
+            end, { buffer = bufnr, desc = "Toggle Inlay Hints" })
           end
         end,
       })
