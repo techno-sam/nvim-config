@@ -23,6 +23,11 @@ return {
         "toml",
       }
 
+      --- languages that we should not offer to automatically install
+      local never_prompt = {
+        "latex", -- the vimtex highlighting is better than treesitter's
+      }
+
       ts.setup({})
 
       ts.install(langs)
@@ -69,7 +74,7 @@ return {
           if vim.tbl_contains(installed_parsers, language) then
             -- Enable the parser if it is already installed
             treesitter_try_attach(buf, language)
-          elseif vim.tbl_contains(available_parsers, language) then
+          elseif vim.tbl_contains(available_parsers, language) and not vim.tbl_contains(never_prompt, language) then
             -- If a parser is available in `nvim-treesitter`, auto-install it and enable it after the installation is done
             local yesno = vim.fn.input(language .. " parser can be installed: would you like to install ? y/n: ")
             if string.match(yesno, "^y.*") then
