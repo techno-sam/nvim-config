@@ -66,6 +66,13 @@ return {
       },
     },
     init = function()
+      _G.dd = function(...)
+        Snacks.debug.inspect(...)
+      end
+      _G.bt = function()
+        Snacks.debug.backtrace()
+      end
+
       -- lsp progress notification
       -- https://github.com/folke/snacks.nvim/blob/main/docs/notifier.md
 
